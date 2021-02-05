@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/Joi-Poc/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/Joi-Poc/static/js/main.f5af4d10.chunk.js",
-    "main.js.map": "/Joi-Poc/static/js/main.f5af4d10.chunk.js.map",
+    "main.js": "/Joi-Poc/static/js/main.920c0178.chunk.js",
+    "main.js.map": "/Joi-Poc/static/js/main.920c0178.chunk.js.map",
     "runtime-main.js": "/Joi-Poc/static/js/runtime-main.2fc146dd.js",
     "runtime-main.js.map": "/Joi-Poc/static/js/runtime-main.2fc146dd.js.map",
-    "static/js/2.434514b9.chunk.js": "/Joi-Poc/static/js/2.434514b9.chunk.js",
-    "static/js/2.434514b9.chunk.js.map": "/Joi-Poc/static/js/2.434514b9.chunk.js.map",
+    "static/js/2.bbaab756.chunk.js": "/Joi-Poc/static/js/2.bbaab756.chunk.js",
+    "static/js/2.bbaab756.chunk.js.map": "/Joi-Poc/static/js/2.bbaab756.chunk.js.map",
     "static/js/3.8ee20718.chunk.js": "/Joi-Poc/static/js/3.8ee20718.chunk.js",
     "static/js/3.8ee20718.chunk.js.map": "/Joi-Poc/static/js/3.8ee20718.chunk.js.map",
     "index.html": "/Joi-Poc/index.html",
     "static/css/main.8c8b27cf.chunk.css.map": "/Joi-Poc/static/css/main.8c8b27cf.chunk.css.map",
-    "static/js/2.434514b9.chunk.js.LICENSE.txt": "/Joi-Poc/static/js/2.434514b9.chunk.js.LICENSE.txt"
+    "static/js/2.bbaab756.chunk.js.LICENSE.txt": "/Joi-Poc/static/js/2.bbaab756.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2fc146dd.js",
-    "static/js/2.434514b9.chunk.js",
+    "static/js/2.bbaab756.chunk.js",
     "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.f5af4d10.chunk.js"
+    "static/js/main.920c0178.chunk.js"
   ]
 }
