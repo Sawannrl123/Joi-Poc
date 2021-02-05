@@ -54,7 +54,7 @@ const schema = Joi.object({
     "string.empty": `Your {#label} can not be empty`,
     "string.min": `Your {#label} has to be at least {#limit} chars`,
   }),
-  lastNameSchema: Joi.string().required().min(5).label("Last Name").messages({
+  lastName: Joi.string().required().min(5).label("Last Name").messages({
     "string.empty": `Your {#label} can not be empty`,
     "string.min": `Your {#label} has to be at least {#limit} chars`,
   }),
@@ -157,6 +157,7 @@ function App() {
       setProfileInfoError(errorObj);
     } else {
       setProfileInfoError(initialState);
+      alert('Validated');
     }
   };
 
