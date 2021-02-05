@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Joi from "joi";
 import "./App.css";
 
@@ -50,36 +50,31 @@ const confirmPasswordSchema = Joi.string()
   });
 
 const schema = Joi.object({
-  username: Joi.string()
-    .alphanum()
-    .pattern(/^[a-zA-Z0-9]{3,30}$/)
-    .min(8)
-    .max(30)
+  firstName: Joi.string().required().min(5).label("First Name").messages({
+    "string.empty": `Your {#label} can not be empty`,
+    "string.min": `Your {#label} has to be at least {#limit} chars`,
+  }),
+  lastNameSchema: Joi.string().required().min(5).label("Last Name").messages({
+    "string.empty": `Your {#label} can not be empty`,
+    "string.min": `Your {#label} has to be at least {#limit} chars`,
+  }),
+  email: Joi.string()
     .required()
-    .label("Username")
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .label("Email")
     .messages({
-      "string.pattern.base":
-        "Your {#label} does not matche the suggested pattern",
-      "string.base": `Your {#label} should match the suggested pattern`,
-      "string.alphanum": `Your {#label} must only contain alpha-numeric characters`,
       "string.empty": `Your {#label} can not be empty`,
-      "string.min": `Your {#label} has to be at least {#limit} chars`,
-      "string.max": `Your {#label} can not be more then {#limit} chars`,
-      "any.required": `Your {#label} is required`,
     }),
   password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/),
-  repeat_password: Joi.ref("password"),
-  access_token: [Joi.string(), Joi.number()],
-  birth_year: Joi.number().integer().min(1900).max(2013),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }),
-})
-  .options({ abortEarly: false })
-  .with("username", "birth_year")
-  .xor("password", "access_token")
-  .with("password", "repeat_password");
+  confirmPassword: Joi.any()
+    .equal(Joi.ref("password"))
+    .required()
+    .label("Confirm password")
+    .messages({ "any.only": "{{#label}} does not match" }),
+}).options({ abortEarly: false });
 
 const initialState = {
   firstName: "",
@@ -93,17 +88,6 @@ function App() {
   const [profileInfo, setProfileInfo] = useState(initialState);
   const [profileInfoError, setProfileInfoError] = useState(initialState);
 
-  useEffect(() => {
-    const data = {
-      username: "123saasffdaf ad sadf asdf adsf123saasffdaf ad sadf asdf adsf123saasffdaf ad sadf asdf adsf123saasffdaf ad sadf asdf adsf123saasffdaf ad sadf asdf adsf",
-      password: "",
-      repeat_password: "password",
-      birth_year: 0,
-    };
-    const validate = schema.validate(data);
-    console.log({ validate: validate.error });
-  });
-
   const handleChange = (e) => {
     setProfileInfo((prevState) => ({
       ...prevState,
@@ -114,12 +98,16 @@ function App() {
   const handleError = (key, value, schema) => {
     try {
       Joi.attempt(value, schema);
+      setProfileInfoError(prevState => ({
+        ...prevState,
+        [key]: ''
+      }));
       return true;
     } catch (error) {
-      setProfileInfoError({
-        ...initialState,
-        [key]: error.message,
-      });
+      setProfileInfoError(prevState => ({
+        ...prevState,
+        [key]: error.message
+      }));
       return false;
     }
   };
@@ -142,17 +130,33 @@ function App() {
         break;
       case "confirmPassword":
         const valid = handleError(name, value, confirmPasswordSchema);
-        if(valid && profileInfo.password !== profileInfo.confirmPassword) {
-          setProfileInfoError({
-            ...initialState,
-            [name]: 'Confirm Password should match password.',
-          });
+        if (valid && profileInfo.password !== profileInfo.confirmPassword) {
+          setProfileInfoError((prevState) => ({
+            ...prevState,
+            [name]: "Confirm Password should match password.",
+          }));
         } else if (valid) {
-          setProfileInfoError(initialState);
+          setProfileInfoError((prevState) => ({
+            ...prevState,
+            confirmPassword: "",
+          }));
         }
         break;
       default:
-        setProfileInfoError(initialState);
+        console.log("Default");
+    }
+  };
+
+  const handleSubmit = () => {
+    const { error: { details } = {} } = schema.validate(profileInfo);
+    if (details) {
+      const errorObj = details.reduce((initial, current) => ({
+        ...initial,
+        [current.path[0]]: current.message
+      }), initialState);
+      setProfileInfoError(errorObj);
+    } else {
+      setProfileInfoError(initialState);
     }
   };
 
@@ -215,6 +219,7 @@ function App() {
           <p>{profileInfoError.confirmPassword}</p>
         )}
       </div>
+      <button onClick={handleSubmit}>Continue</button>
     </div>
   );
 }
